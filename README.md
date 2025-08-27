@@ -1,61 +1,197 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🔗 Encurtador de URL
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Um encurtador de URL moderno com QR Code, métricas em tempo real e sistema de expiração.
 
-## About Laravel
+## Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-  **Autenticação completa** (registro, login, logout)
+-  **Encurtamento de URLs** com slug único de 6 caracteres
+-  **Expiração de links** configurável
+-  **QR Code** gerado automaticamente para cada link
+-  **Dashboard em tempo real** com métricas atualizadas
+-  **Rate limiting** (30 links por minuto por usuário)
+-  **Segurança** com hash de IPs e autorização de usuários
+-  **Analytics** detalhadas com filtros por período
+-  **Interface moderna** com Tailwind CSS
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack Tecnológica
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12
+- **Database**: MySQL/SQLite
+- **Frontend**: Blade Templates + Tailwind CSS
+- **Autenticação**: Laravel Breeze
+- **QR Code**: SimpleSoftwareIO/simple-qrcode
+- **Testes**: Pest/PHPUnit
+- **Cache**: File/Redis (opcional)
 
-## Learning Laravel
+## Instalação
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Pré-requisitos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.2+
+- Composer
+- MySQL/SQLite
+- Node.js & NPM
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Passos
 
-## Laravel Sponsors
+1. **Clone o repositório**
+```bash
+git clone https://github.com/developercintra/url-shortener.git
+cd url-shortener
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Instale as dependências**
+```bash
+composer install
+npm install
+```
 
-### Premium Partners
+3. **Configure o ambiente**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Configure o banco de dados**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=url_shortener
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Contributing
+5. **Execute as migrations**
+```bash
+php artisan migrate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Compile os assets**
+```bash
+npm run build
+```
 
-## Code of Conduct
+7. **Inicie o servidor**
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Acesse: http://localhost:8000
 
-## Security Vulnerabilities
+## Testes
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Executar todos os testes
+```bash
+php artisan test
+```
 
-## License
+### Executar com cobertura
+```bash
+php artisan test --coverage
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Executar testes específicos
+```bash
+php artisan test --filter=LinkControllerTest
+php artisan test tests/Feature/QrCodeTest.php
+```
+
+## API Endpoints
+
+### Autenticação
+- `POST /register` - Registro de usuário
+- `POST /login` - Login
+- `POST /logout` - Logout
+
+### Links
+- `GET /links` - Listar links do usuário
+- `POST /links` - Criar novo link (Rate limited: 30/min)
+- `GET /links/{id}` - Detalhes do link
+- `GET /links/{id}/qr` - QR Code do link
+
+### Redirecionamento
+- `GET /s/{slug}` - Redirecionar para URL original
+
+### Métricas (JSON)
+- `GET /metrics/summary?period={1|7|30}` - Resumo das métricas
+- `GET /metrics/top?period={1|7|30}&limit={10}` - Top links
+
+### Dashboard
+- `GET /dashboard?period={1|7|30}` - Dashboard com filtros
+
+## Estrutura do Banco
+
+### Tabela `users`
+```sql
+id, name, email, password, created_at, updated_at
+```
+
+### Tabela `links`
+```sql
+id, user_id, original_url, slug, status, expires_at, click_count, created_at, updated_at
+```
+
+### Tabela `visits`
+```sql
+id, link_id, ip_hash, user_agent, created_at
+```
+
+## Casos de Uso
+
+### 1. Encurtar URL simples
+```http
+POST /links
+{
+    "original_url": "https://exemplo.com/pagina-muito-longa"
+}
+```
+
+### 2. Link com expiração
+```http
+POST /links
+{
+    "original_url": "https://evento.com/inscricoes",
+    "expires_at": "2024-12-31T23:59:59"
+}
+```
+
+### 3. Obter métricas
+```http
+GET /metrics/summary?period=7
+```
+
+## Segurança
+
+- **IPs hasheados**: IPs são armazenados com SHA-256
+- **Autorização**: Usuários só acessam seus próprios links
+- **Rate limiting**: Previne spam de criação de links
+- **Validação**: URLs e datas de expiração validadas
+- **CSRF Protection**: Tokens CSRF em formulários
+
+## Tempo Real
+
+O dashboard atualiza automaticamente a cada 5 segundos usando:
+- Fetch API para endpoints JSON
+- JavaScript vanilla para atualizações DOM
+- Cache-Control para otimização
+
+## QR Codes
+
+- Gerados automaticamente para cada link
+- Formato PNG, 200x200px
+- Cache de 1 hora
+- Download disponível na interface
+
+## Cobertura de Testes
+
+O projeto mantém >80% de cobertura com testes para:
+
+- Autenticação e autorização
+- Criação e validação de links
+- Redirecionamento e expiração
+- Geração de QR codes
+- Rate limiting
+- Métricas e dashboard
+- APIs JSON

@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('link_id')->constrained()->onDelete('cascade');
-            $table->string('ip')->nullable();
+            $table->string('ip_hash')->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamps();
+            
+            $table->index(['link_id', 'created_at']);
         });
     }
 

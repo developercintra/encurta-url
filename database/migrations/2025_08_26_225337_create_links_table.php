@@ -20,6 +20,9 @@ return new class extends Migration
         $table->timestamp('expires_at')->nullable();
         $table->unsignedBigInteger('click_count')->default(0);
         $table->timestamps();
+        
+        $table->index(['status']);
+        $table->index(['expires_at']);
     });
 }
 

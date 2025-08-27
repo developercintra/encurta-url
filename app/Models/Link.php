@@ -15,9 +15,18 @@ class Link extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','original_url','slug','status','expires_at','click_count'
+        'user_id',
+        'original_url',
+        'slug',
+        'status',
+        'expires_at',
+        'click_count'
     ];
 
+    protected $casts = [
+        'expires_at' => 'datetime', // <— isto evita 500 ao chamar isPast()
+    ];
+    
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

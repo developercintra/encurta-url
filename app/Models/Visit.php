@@ -11,7 +11,7 @@ class Visit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['link_id', 'ip', 'user_agent'];
+    protected $fillable = ['link_id', 'ip_hash', 'user_agent'];
 
     public function link(): BelongsTo
     {

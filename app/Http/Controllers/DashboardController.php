@@ -4,23 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
-use App\Models\Link;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+        $period = $request->get('period', '30');
+        
+        $startDate = match($period) {
+            '1' => Carbon::today(),
+            '7' => Carbon::now()->subDays(7),
+            '30' => Carbon::now()->subDays(30),
+            default => Carbon::now()->subDays(30)
+        };
 
-        $totalLinks   = $user->links()->count();
-        $activeLinks  = $user->links()->where('status', 'active')->count();
-        $expiredLinks = $user->links()->where('status', 'expired')->count();
-        $totalClicks  = $user->links()->sum('click_count');
-        $topLinks     = $user->links()->orderByDesc('click_count')->take(10)->get();
+        $linksQuery = $user->links()->where('created_at', '>=', $startDate);
+        
+        $totalLinks = $linksQuery->count();
+        $activeLinks = $linksQuery->where('status', 'active')->count();
+        $expiredLinks = $linksQuery->where('status', 'expired')->count();
+        $inactiveLinks = $linksQuery->where('status', 'inactive')->count();
+        $totalClicks = $linksQuery->sum('click_count');
+        $topLinks = $linksQuery->orderByDesc('click_count')->take(10)->get();
 
-        return view('dashboard.index', compact(
-            'totalLinks', 'activeLinks', 'expiredLinks', 'totalClicks', 'topLinks'
+        return view('dashboard', compact(
+            'totalLinks', 'activeLinks', 'expiredLinks', 'inactiveLinks', 
+            'totalClicks', 'topLinks', 'period'
         ));
     }
 }
