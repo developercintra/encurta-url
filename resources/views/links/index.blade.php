@@ -7,15 +7,40 @@
     <title>Criar Link - Encurtador de URL</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Figtree', sans-serif;
+        }
+        .btn-primary {
+            background-color: #8B5CF6;
+        }
+        .btn-primary:hover {
+            background-color: #7C3AED;
+        }
+        .focus-primary:focus {
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #8B5CF6;
+            border-color: #8B5CF6;
+        }
+        .pagination .page-link {
+            color: #8B5CF6;
+        }
+        .pagination .page-link:hover {
+            color: #7C3AED;
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-gray-50 min-h-screen">
+<body class="antialiased bg-gray-50 min-h-screen">
     <!-- Header -->
     <header class="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="h-10 w-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                    <div class="h-10 w-10 bg-purple-600 rounded-xl flex items-center justify-center">
                         <span class="text-white text-lg font-bold">🔗</span>
                     </div>
                     <div>
@@ -57,8 +82,10 @@
             <!-- Main Form -->
             <div class="bg-white shadow-xl rounded-2xl p-8 border border-gray-200">
                 <div class="text-center mb-8">
-                    <div class="mx-auto h-20 w-20 bg-blue-600 rounded-2xl flex items-center justify-center mb-6">
-                        <span class="text-3xl">🚀</span>
+                    <div class="mx-auto h-20 w-20 bg-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-3">Encurtar URL</h2>
                     <p class="text-gray-600 text-lg">Transforme links longos em URLs curtas e poderosas</p>
@@ -79,7 +106,7 @@
                                    required
                                    value="{{ old('original_url') }}"
                                    placeholder="https://exemplo.com/sua-url-muito-longa-que-precisa-ser-encurtada"
-                                   class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 bg-gray-50 hover:bg-white">
+                                   class="w-full px-6 py-4 text-base border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-300 bg-gray-50 hover:bg-white">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-6">
                                 <span class="text-2xl">🌐</span>
                             </div>
@@ -103,7 +130,7 @@
                                    id="expires_at"
                                    value="{{ old('expires_at') }}"
                                    min="{{ now()->format('Y-m-d\TH:i') }}"
-                                   class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 bg-gray-50 hover:bg-white">
+                                   class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-300 bg-gray-50 hover:bg-white">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-6">
                                 <span class="text-2xl">⏰</span>
                             </div>
@@ -123,7 +150,7 @@
                     <!-- Submit Button -->
                     <div class="pt-4">
                         <button type="submit" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+                                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
                             <span class="flex items-center justify-center space-x-3">
                                 <span class="text-2xl">✨</span>
                                 <span>Encurtar Agora</span>
@@ -143,7 +170,7 @@
                         </a>
                         @if($links->count() > 0)
                             <button onclick="showLinks()" 
-                                    class="flex items-center justify-center space-x-2 bg-blue-100 hover:bg-blue-200 text-blue-700 py-3 px-4 rounded-xl transition duration-200 font-medium">
+                                    class="flex items-center justify-center space-x-2 bg-purple-100 hover:bg-purple-200 text-purple-700 py-3 px-4 rounded-xl transition duration-200 font-medium">
                                 <span>📋</span>
                                 <span>Meus Links ({{ $links->count() }})</span>
                             </button>
@@ -183,9 +210,9 @@
                                         </div>
                                         <p class="text-gray-900 font-medium truncate mb-1">{{ $link->original_url }}</p>
                                         <div class="flex items-center space-x-3">
-                                            <p class="text-blue-600 font-mono text-sm">{{ url('/s/' . $link->slug) }}</p>
+                                            <p class="text-purple-600 font-mono text-sm">{{ url('/s/' . $link->slug) }}</p>
                                             <button onclick="copyToClipboard('{{ url('/s/' . $link->slug) }}')" 
-                                                    class="text-gray-400 hover:text-blue-600 transition-colors text-lg"
+                                                    class="text-gray-400 hover:text-purple-600 transition-colors text-lg"
                                                     title="Copiar link">
                                                 📋
                                             </button>
@@ -193,7 +220,7 @@
                                     </div>
                                     <div class="flex items-center space-x-3">
                                         <a href="{{ route('links.show', $link) }}" 
-                                           class="text-blue-600 hover:text-blue-800 transition-colors text-xl"
+                                           class="text-purple-600 hover:text-purple-800 transition-colors text-xl"
                                            title="Ver detalhes">
                                             👁️
                                         </a>
