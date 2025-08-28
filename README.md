@@ -195,3 +195,6 @@ O projeto mantém >80% de cobertura com testes para:
 - Rate limiting
 - Métricas e dashboard
 - APIs JSON
+
+## Demonstração 
+[Demonstração](https://github.com/developercintra/encurta-url/releases/download/video/2025-08-27.23-43-38.mp4)
