@@ -12,8 +12,8 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $period = $request->get('period', '30');
-        
-        $startDate = match($period) {
+
+        $startDate = match ($period) {
             '1' => Carbon::today(),
             '7' => Carbon::now()->subDays(7),
             '30' => Carbon::now()->subDays(30),
@@ -21,17 +21,23 @@ class DashboardController extends Controller
         };
 
         $linksQuery = $user->links()->where('created_at', '>=', $startDate);
-        
-        $totalLinks = $linksQuery->count();
-        $activeLinks = $linksQuery->where('status', 'active')->count();
-        $expiredLinks = $linksQuery->where('status', 'expired')->count();
-        $inactiveLinks = $linksQuery->where('status', 'inactive')->count();
-        $totalClicks = $linksQuery->sum('click_count');
-        $topLinks = $linksQuery->orderByDesc('click_count')->take(10)->get();
+
+        $totalLinks   = (clone $linksQuery)->count();
+        $activeLinks  = (clone $linksQuery)->where('status', 'active')->count();
+        $expiredLinks = (clone $linksQuery)->where('status', 'expired')->count();
+        $inactiveLinks = (clone $linksQuery)->where('status', 'inactive')->count();
+        $totalClicks  = (clone $linksQuery)->sum('click_count');
+        $topLinks     = (clone $linksQuery)->orderByDesc('click_count')->take(10)->get();
+
 
         return view('dashboard', compact(
-            'totalLinks', 'activeLinks', 'expiredLinks', 'inactiveLinks', 
-            'totalClicks', 'topLinks', 'period'
+            'totalLinks',
+            'activeLinks',
+            'expiredLinks',
+            'inactiveLinks',
+            'totalClicks',
+            'topLinks',
+            'period'
         ));
     }
 }

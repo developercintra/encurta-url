@@ -69,6 +69,7 @@ class DashboardTest extends TestCase
 
         $topLink = Link::factory()->create([
             'user_id' => $user->id,
+            'status' => 'active',
             'click_count' => 100,
             'created_at' => Carbon::now()->subDays(2)
         ]);
